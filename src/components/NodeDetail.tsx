@@ -1,4 +1,4 @@
-import { type ReactNode, useEffect, useMemo, useState } from 'react'
+import { type ReactNode, useEffect, useMemo, useRef, useState } from 'react'
 import { ArrowLeft } from 'lucide-react'
 import {
   Area,
@@ -17,6 +17,7 @@ import { Flag } from './Flag'
 import { StatusDot } from './StatusDot'
 import { bytes, pct, relativeAge, uptime } from '../utils/format'
 import { deriveUsage, displayName, distroLogo, osLabel, virtLabel } from '../utils/derive'
+import { cycleProgress, hasCost, remainingDays, remainingValue } from '../utils/cost'
 import { cn, strokeColor } from '../utils/cn'
 import {
   buildLatencyChart,
@@ -25,7 +26,7 @@ import {
 } from '../utils/latency'
 import { useNodeLatency } from '../hooks/useNodeLatency'
 import type { BackendPool } from '../api/pool'
-import type { HistorySample, LatencyType, Node, TaskQueryResult } from '../types'
+import type { HistorySample, LatencyType, Node, NodeMeta, TaskQueryResult } from '../types'
 
 const TOOLTIP_STYLE = {
   background: 'hsl(var(--popover))',
@@ -42,6 +43,10 @@ interface Props {
 }
 
 export function NodeDetail({ node, onClose, showSource, pool }: Props) {
+  const scrollRef = useRef<HTMLDivElement>(null)
+  const headerRef = useRef<HTMLDivElement>(null)
+  const [stuck, setStuck] = useState(false)
+
   useEffect(() => {
     if (!node) return
     const onKey = (e: KeyboardEvent) => {
@@ -55,6 +60,18 @@ export function NodeDetail({ node, onClose, showSource, pool }: Props) {
       document.body.style.overflow = prev
     }
   }, [node, onClose])
+
+  useEffect(() => {
+    const el = scrollRef.current
+    if (!el) return
+    setStuck(false)
+    const onScroll = () => {
+      const h = headerRef.current?.offsetHeight ?? 60
+      setStuck(el.scrollTop > h)
+    }
+    el.addEventListener('scroll', onScroll, { passive: true })
+    return () => el.removeEventListener('scroll', onScroll)
+  }, [node])
 
   const { pingData, tcpData, loading: latencyLoading } = useNodeLatency(
     pool,
@@ -80,8 +97,18 @@ export function NodeDetail({ node, onClose, showSource, pool }: Props) {
   const history = node.history || []
 
   return (
-    <div className="fixed inset-0 z-50 bg-background overflow-y-auto animate-in fade-in duration-150">
-      <div className="sticky top-0 z-10 backdrop-blur bg-background/85 border-b">
+    <div
+      ref={scrollRef}
+      className="fixed inset-0 z-50 bg-background overflow-y-auto animate-in fade-in duration-150"
+    >
+      <div
+        ref={headerRef}
+        className={`sticky top-0 z-10 transition-[background-color,backdrop-filter,border-color] duration-200 ${
+          stuck
+            ? 'border-b border-border/40 backdrop-blur bg-background/70'
+            : 'border-b border-transparent'
+        }`}
+      >
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center gap-2 sm:gap-3">
           <Button variant="ghost" size="icon" onClick={onClose} aria-label="返回" className="shrink-0">
             <ArrowLeft className="h-4 w-4" />
@@ -218,6 +245,8 @@ export function NodeDetail({ node, onClose, showSource, pool }: Props) {
             <KV k="运行时长" v={uptime(d?.uptime)} />
             <KV k="数据更新" v={relativeAge(d?.timestamp)} />
           </Section>
+
+          {hasCost(node.meta) && <CostSection meta={node.meta} />}
         </div>
       </div>
     </div>
@@ -475,5 +504,55 @@ function LatencyStatsRow({
         {lossRate.toFixed(1)}%
       </span>
     </div>
+  )
+}
+
+function CostSection({ meta }: { meta: NodeMeta }) {
+  const days = remainingDays(meta.expireTime)
+  const value = remainingValue(meta)
+  const progress = cycleProgress(meta)
+  const unit = meta.priceUnit || '$'
+
+  let daysLabel: string
+  let daysClass = ''
+  if (days == null) daysLabel = '未设置'
+  else if (days < 0) {
+    daysLabel = `已过期 ${Math.abs(days)} 天`
+    daysClass = 'text-red-500'
+  } else if (days <= 7) {
+    daysLabel = `${days} 天`
+    daysClass = 'text-red-500'
+  } else if (days <= 30) {
+    daysLabel = `${days} 天`
+    daysClass = 'text-orange-500'
+  } else {
+    daysLabel = `${days} 天`
+  }
+
+  const barColor =
+    days == null || days < 0
+      ? 'bg-muted-foreground/40'
+      : days <= 7
+        ? 'bg-red-500'
+        : days <= 30
+          ? 'bg-orange-500'
+          : 'bg-emerald-500'
+
+  return (
+    <Section title="费用">
+      <KV k="月费" v={meta.price > 0 ? `${unit}${meta.price} / ${meta.priceCycle} 天` : null} />
+      <KV k="到期" v={meta.expireTime || null} />
+      <KV k="剩余" v={<span className={daysClass}>{daysLabel}</span>} />
+      <KV k="剩余价值" v={meta.price > 0 ? `${unit}${value.toFixed(2)}` : null} />
+
+      {meta.expireTime && days != null && (
+        <div className="mt-3 h-1.5 w-full rounded-full bg-muted overflow-hidden">
+          <div
+            className={cn('h-full rounded-full transition-all', barColor)}
+            style={{ width: `${progress}%` }}
+          />
+        </div>
+      )}
+    </Section>
   )
 }

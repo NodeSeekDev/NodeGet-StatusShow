@@ -7,6 +7,10 @@ export interface NodeMeta {
   lat: number | null
   lng: number | null
   order: number
+  price: number
+  priceUnit: string
+  priceCycle: number
+  expireTime: string
 }
 
 export interface StaticSystem {
@@ -117,7 +121,7 @@ export interface TaskQueryCondition {
   last?: null
 }
 
-export type View = 'cards' | 'table'
+export type View = 'cards' | 'table' | 'map'
 
 export type Sort =
   | 'default'

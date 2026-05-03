@@ -9,6 +9,7 @@ import { Footer } from './components/Footer'
 import { NodeCard } from './components/NodeCard'
 import { NodeTable } from './components/NodeTable'
 import { NodeDetail } from './components/NodeDetail'
+import { WorldMap } from './components/WorldMap'
 import { TagFilter } from './components/TagFilter'
 import { RegionFilter } from './components/RegionFilter'
 import { deriveUsage, displayName } from './utils/derive'
@@ -20,7 +21,8 @@ const SORT_KEY = 'nodeget.sort'
 
 function initialView(): View {
   const v = localStorage.getItem(VIEW_KEY)
-  return v === 'table' ? 'table' : 'cards'
+  if (v === 'table' || v === 'map') return v
+  return 'cards'
 }
 
 function initialSort(): Sort {
@@ -223,6 +225,7 @@ export function App() {
           </div>
         )}
         {!empty && view === 'table' && <NodeTable nodes={list} onOpen={setSelected} />}
+        {!empty && view === 'map' && <WorldMap nodes={list} onOpen={setSelected} />}
 
         {hasErrors && (
           <Alert variant="warning">
