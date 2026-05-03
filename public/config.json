@@ -4,9 +4,9 @@
   "footer": "Powered by NodeGet",
   "site_tokens": [
     {
-      "name": "master server node 1",
-      "backend_url": "wss://your-backend.example.com",
-      "token": "YOUR_TOKEN_HERE"
+      "name": "Server",
+      "backend_url": "wss://api.ccxv.de",
+      "token": "pi3CcSXNzqF9HtAz:a96OjzIxREheLnMSPboMPfUnCEgBTGLm"
     }
-  ]
+  ] 
 }
