@@ -1,10 +1,10 @@
 {
-  "site_name": "NodeGet Status",
-  "site_logo": "",
+  "site_name": "n0mercy's nodes",
+  "site_logo": "https://www.nodeseek.com/avatar/44502.png",
   "footer": "Powered by NodeGet",
   "site_tokens": [
     {
-      "name": "master server node 1",
+      "name": "n0mercy's nodes",
       "backend_url": "wss://nodeget.wqtm.de",
       "token": "V99Ntu60KaLcO6cy:R2F0ZYiJ8qsAKFv0NW3kl3rYzeZdpgjo"
     }
