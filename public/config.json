@@ -5,8 +5,8 @@
   "site_tokens": [
     {
       "name": "master server node 1",
-      "backend_url": "wss://your-backend.example.com",
-      "token": "YOUR_TOKEN_HERE"
+      "backend_url": "wss://nodeget.wqtm.de",
+      "token": "V99Ntu60KaLcO6cy:R2F0ZYiJ8qsAKFv0NW3kl3rYzeZdpgjo"
     }
   ]
 }
