@@ -1,5 +1,5 @@
 {
-  "name": "nodeget-statusshow",
+  "name": "nodegetstatushow",
   "compatibility_date": "2026-05-01",
   "assets": {
     "directory": "./dist",
