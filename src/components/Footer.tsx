@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { parseGitRepo } from "../utils/git"
+import { ExternalLink } from 'lucide-react'
 
 
 export function Footer({ text, repo, dist_page}: { text?: string, repo?:string, dist_page?:string}) {
@@ -16,21 +17,29 @@ export function Footer({ text, repo, dist_page}: { text?: string, repo?:string, 
   }, [])
 
   const outdated = latest != null && latest !== __APP_VERSION__
-  const laststDist = dist_page ? `${dist_page}/NodeGet-StatusShow-v${latest}.zip` : repo + '/releases'
+  const laststDist = dist_page ? `${dist_page}/NodeGet-StatusShow.zip?version=v${latest}` : repo + '/releases'
 
   return (
     <footer className="border-t">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex justify-end gap-4 text-xs text-muted-foreground">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-end gap-4 text-xs text-muted-foreground">
         <a href={repo} target="_blank" rel="noreferrer" className="hover:text-primary transition-colors">
           {text || 'Powered by NodeGet'}
         </a>
         <span>
-          <a href={`/NodeGet-StatusShow-v${__APP_VERSION__}.zip`} 
-          target="_blank" rel="noreferrer" className="ml-1">v{__APP_VERSION__}</a>
-          {outdated && (
-            <a href={laststDist} target="_blank" rel="noreferrer" className="ml-2 text-destructive">
-              Update to v{latest}
+          {
+            !outdated && 
+            <a href={laststDist} target="_blank" rel="noreferrer" className="ml-2 flex items-center">
+              <ExternalLink className='inline-block w-3 mr-1'/>
+              v{__APP_VERSION__}
             </a>
+          }
+          {outdated && (
+            <>
+              <span>v{__APP_VERSION__}</span>
+              <a href={laststDist} target="_blank" rel="noreferrer" className="ml-2 text-destructive">
+                Update to v{latest}
+              </a>
+            </>
           )}
         </span>
       </div>

@@ -1,7 +1,7 @@
 import prettyBytes from 'pretty-bytes'
 
 export function bytes(n?: number | null) {
-  return n && n > 0 ? prettyBytes(n) : '0 B'
+  return n && n > 0 ? prettyBytes(n, {binary:true}) : '0 B'
 }
 
 export function pct(v?: number | null) {

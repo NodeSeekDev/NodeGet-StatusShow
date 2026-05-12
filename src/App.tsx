@@ -180,7 +180,7 @@ export function App() {
     )
   }
 
-  const logo = config.theme_config.site_logo || DEFAULT_LOGO
+  const logo = config.user_preferences.site_logo || DEFAULT_LOGO
   const empty = list.length === 0
   const hasErrors = errors.length > 0
 
@@ -188,7 +188,7 @@ export function App() {
     <div className="min-h-screen flex flex-col">
       <Background />
       <Navbar
-        siteName={config.theme_config.site_name || '你没设置'}
+        siteName={config.user_preferences.site_name || '你没设置'}
         logo={logo}
         query={query}
         onQuery={setQuery}
@@ -258,7 +258,7 @@ export function App() {
         )}
       </main>
 
-      <Footer text={config.theme_config.footer} repo={config.repository} dist_page={config.dist_page}/>
+      <Footer text={config.user_preferences.footer} repo={config.repository} dist_page={config.dist_page}/>
 
       <NodeDetail
         node={selectedNode}

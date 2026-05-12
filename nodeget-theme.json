@@ -5,7 +5,7 @@
   "author": "NodeSeekDev",
   "repository": "https://github.com/NodeSeekDev/NodeGet-StatusShow",
   "dist_page": "https://nodeget.pages.dev",
-  "theme_config":{
+  "user_preferences":{
     "site_name": "NodeGet Status",
     "site_logo": "",
     "footer": "Powered by NodeGet"
@@ -17,5 +17,6 @@
       "token": "YOUR_TOKEN_HERE"
     }
   ],
+  "version": "will be auto filled using version in package.json",
   "license": ""
 }
