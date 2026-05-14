@@ -5,11 +5,6 @@
   "author": "NodeSeekDev",
   "repository": "https://github.com/NodeSeekDev/NodeGet-StatusShow",
   "dist_page": "https://nodeget.pages.dev",
-  "user_preferences": {
-    "site_name": "NodeGet Status",
-    "site_logo": "",
-    "footer": "Powered by NodeGet"
-  },
   "user_preferences_form": {
     "version": "0.0.1",
     "items": [
@@ -36,13 +31,6 @@
       }
     ]
   },
-  "site_tokens": [
-    {
-      "name": "master server node 1",
-      "backend_url": "wss://your-backend.example.com",
-      "token": "YOUR_TOKEN_HERE"
-    }
-  ],
   "version": "will be auto filled using version in package.json",
   "license": ""
 }

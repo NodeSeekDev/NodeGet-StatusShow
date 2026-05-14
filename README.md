@@ -11,15 +11,7 @@ npm i
 npm run dev
 ```
 
-## 一键部署
-
-此为官方最推荐的部署方式，方便升级至新版
-
-Fork本仓库 修改 [nodeget-theme.json](./nodeget-theme.json) 中的 user_preferences 和 site_tokens， 然后在cloudflare pages / vercel 直接部署，绑定域名
-
-要更新版本则就在 fork 的 GitHub 仓库点击 sync 就行，可以轻松且可控的升级
-
-## 编译结果下载
+## 基于静态文件部署
 
 本项目 build 完是纯静态站， 丢哪都行
 
@@ -29,13 +21,40 @@ Fork本仓库 修改 [nodeget-theme.json](./nodeget-theme.json) 中的 user_pref
 
 <https://nodeget.pages.dev/NodeGet-StatusShow.zip>
 
-## 环境变量
-如果不想编辑修改public/config.json，可以利用环境变量在预编译阶段自动生成public/config.json
+下载后修改 config.json 的信息，然后可以上传到任意静态文件服务，如 nginx、 cloudflare pages、vercel
 
-预编译阶段会检查是否有对应的环境变量，如果没有相关环境变量则默认不进行预编译
+## 基于 cloudflare pages编译部署
 
+此为官方最推荐的部署方式，方便升级至新版
+
+Fork本仓库, 然后在cloudflare pages / vercel 直接部署，绑定域名
+
+设定环境变量 `NODEGET_CONFIG`，需要是有效的JSON字符串
+
+```json
+{
+  "user_preferences":{
+    "site_name": "NodeGet Status",
+    "site_logo": "",
+    "footer": "Powered by NodeGet"
+  },
+  "site_tokens": [
+    {
+      "name": "master server node 1",
+      "backend_url": "wss://your-backend.example.com",
+      "token": "YOUR_TOKEN_HERE"
+    }
+  ]
+}
+```
+
+要更新版本则就在 fork 的 GitHub 仓库点击 sync 就行，可以轻松且可控的升级
 
 > 环境变量是 **build 时** 注入的 改完之后必须重新部署一次才会生效 在面板里光改不重新跑 build 是没用的
+
+## 环境变量(旧版)
+
+旧版没有充分考虑扩展性，只支持有限的环境变量
 
 ```
 SITE_NAME=狼牙的探针
