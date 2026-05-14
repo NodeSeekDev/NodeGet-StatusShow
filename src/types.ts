@@ -95,9 +95,8 @@ export interface ThemeConfig {
   "repository"?: string
   "dist_page"?: string;
   "user_preferences_form":{
-    site_name?: string
-    site_logo?: string
-    footer?: string
+    version:string,
+    items:any[]
   },
   "version"?: string
   "license"?: string
