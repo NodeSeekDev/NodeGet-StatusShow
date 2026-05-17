@@ -13,9 +13,9 @@ npm run dev
 ## 一键部署
 一键部署需要主控的版本在0.2.6以上，请先到[控制面板](https://dash.nodeget.com/#/dashboard/node-manage?tab=servers)查看主控版本
 
-[
-  ![deploy button](https://dash.nodeget.com/deploy-button.png)
-](https://dash.nodeget.com/#/dashboard/theme-management?add=https://nodeget.pages.dev)
+<a href="https://dash.nodeget.com/#/dashboard/theme-management?add=https://nodeget.pages.dev">
+  <img src="https://dash.nodeget.com/deploy-button.png" alt="deploy button" width="230px" />
+</a>
 
 
 ## 基于静态文件部署
